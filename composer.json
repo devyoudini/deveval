@@ -1,0 +1,18 @@
+{
+    "name": "dev/eval",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    },
+    "authors": [
+        {
+            "name": "devyoudini"
+        }
+    ],
+    "require": {
+        "filp/whoops": "^2.15",
+        "vlucas/phpdotenv": "^5.6"
+    }
+}
