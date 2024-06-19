@@ -6,3 +6,5 @@ define("APP_PATH", ROOT . "app" . DS);
 define("CONTROLLERS_PATH", APP_PATH . "controllers" . DS);
 define("UTILS_PATH", APP_PATH . "utils" . DS);
 define("PUBLIC_PATH", ROOT . "public" . DS);
+
+define("DEV", "development");
