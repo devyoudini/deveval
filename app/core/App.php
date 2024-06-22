@@ -1,41 +1,53 @@
 <?php declare(strict_types=1);
 namespace App\Core;
 
-use Http\HttpRequest;
-use Http\HttpResponse;
-use Whoops\Handler\PrettyPageHandler;
-use Whoops\Run;
+require dirname(__DIR__, 2) . '/configs/configs.php';
+require AUTOLOAD;
+require HELPER;
 
-class App {
-    public function run(): void {
-        $this->__beforeRun();
-        $this->__requestResponse();
-    }
-    private function __beforeRun(): void {
-        $this->__registerErrorHandlers();
-    }
-    private function __registerErrorHandlers(): void {
-        $whoops = new Run();
-        if (Env::get("ENVIRONMENT") === DEV) {
-            $whoops->pushHandler(new PrettyPageHandler());
-        } else {
-            $whoops->pushHandler(function ($e) {
-                echo 'Todo: Friendly error page and send an email to the developer';
-            });
-        }
-        $whoops->register();
-    }
-    private function __requestResponse() {
-        $request = new HttpRequest($_GET, $_POST, $_COOKIE, $_FILES, $_SERVER);
-        $response = new HttpResponse;
+$dotenv = \Dotenv\Dotenv::createImmutable(ROOT);
+$dotenv->load();
 
-        foreach ($response->getHeaders() as $header) {
-            header($header, false);
-        }
+$whoops = new ErrorHandler;
+$whoops->register();
 
-        $response->setContent("Hello, World");
+$injector = include ('Dependencies.php');
+$request = $injector->make('Http\HttpRequest');
+$response = $injector->make('Http\HttpResponse');
 
-        echo $response->getContent();
+$routeDefinitionCallback = function (\FastRoute\RouteCollector $r) {
+    $routes = include (ROUTES);
+    foreach ($routes as $route) {
+        $r->addRoute($route[0], $route[1], $route[2]);
     }
-    private function __routing() {}
+};
+
+$dispatcher = \FastRoute\simpleDispatcher($routeDefinitionCallback);
+
+$routeInfo = $dispatcher->dispatch($request->getMethod(), $request->getPath());
+switch ($routeInfo[0]) {
+    case \FastRoute\Dispatcher::NOT_FOUND:
+        $response->setContent('404 - Page not found');
+        $response->setStatusCode(404);
+        break;
+    case \FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
+        $response->setContent('405 - Method not allowed');
+        $response->setStatusCode(405);
+        break;
+    case \FastRoute\Dispatcher::FOUND:
+        $className = $routeInfo[1][0];
+        $method = $routeInfo[1][1];
+        $vars = $routeInfo[2];
+
+        $class = $injector->make($className);
+        $class->$method($vars);
+        break;
 }
+
+
+
+foreach ($response->getHeaders() as $header) {
+    header($header, false);
+}
+
+echo $response->getContent();
