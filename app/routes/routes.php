@@ -4,5 +4,5 @@ const prefix = '/dev_eval_latest/public';
 return [
     ['GET', '/', ['App\Controllers\HomeController', 'index']],
     ['GET', '/admin', ['App\Controllers\AdminController', 'index']],
-    ['GET', '/login', ['App\Controllers\LoginController', 'index']],
+    ['GET', '/auth-file/login', ['App\Controllers\LoginController', 'index']], //login
 ];
