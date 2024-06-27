@@ -4,7 +4,7 @@ namespace App\Controllers;
 use Http\Request;
 use Http\Response;
 
-class HomeController {
+class HomeController extends BaseController {
     private $response;
     private $request;
     public function __construct(Response $response, Request $request) {
