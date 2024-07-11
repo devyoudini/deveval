@@ -16,7 +16,6 @@ class LoginController {
     public function index(): void {
         echo "Login Page <br>";
         $this->initToken();
-        dd($this->isTokenValid());
     }
     public function initToken() {
         $this->token = $this->request->getParameter("token");

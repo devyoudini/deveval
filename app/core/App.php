@@ -11,12 +11,12 @@ $dotenv->load();
 $whoops = new ErrorHandler;
 $whoops->register();
 
-$injector = include ('Dependencies.php');
+$injector = include 'Dependencies.php';
 $request = $injector->make('Http\HttpRequest');
 $response = $injector->make('Http\HttpResponse');
 
 $routeDefinitionCallback = function (\FastRoute\RouteCollector $r) {
-    $routes = include (ROUTES);
+    $routes = include ROUTES;
     foreach ($routes as $route) {
         $r->addRoute($route[0], $route[1], $route[2]);
     }
@@ -43,8 +43,6 @@ switch ($routeInfo[0]) {
         $class->$method($vars);
         break;
 }
-
-
 
 foreach ($response->getHeaders() as $header) {
     header($header, false);
