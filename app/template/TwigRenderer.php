@@ -5,7 +5,7 @@ namespace App\Template;
 use Twig\Environment;
 
 class TwigRenderer implements Renderer {
-    private $renderer;
+    private Environment $renderer;
 
     public function __construct(Environment $renderer) {
         $this->renderer = $renderer;

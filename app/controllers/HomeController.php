@@ -14,8 +14,11 @@ class HomeController extends BaseController {
         $this->request = $request;
         $this->renderer = $renderer;
     }
-    public function index(): void {}
+    public function index(): void {
+        $this->show();
+    }
     public function show(): void {
         $html = $this->renderer->render('home');
+        $this->response->setContent($html);
     }
 }

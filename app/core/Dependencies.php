@@ -15,6 +15,9 @@ $injector->define('Http\HttpRequest', [
 $injector->alias('Http\Response', 'Http\HttpResponse');
 $injector->share('Http\HttpResponse');
 
+$injector->alias('App\Template\Renderer', 'App\Template\TwigRenderer');
+$injector->alias('App\Template\FrontendRenderer', 'App\Template\FrontendTwigRenderer');
+
 $injector->define('Mustache_Engine', [
     'loader' => new Mustache_Loader_FilesystemLoader(VIEWS_PATH, [
         'options' => [

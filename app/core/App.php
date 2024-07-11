@@ -41,6 +41,7 @@ switch ($routeInfo[0]) {
 
         $class = $injector->make($className);
         $class->$method($vars);
+
         break;
 }
 
